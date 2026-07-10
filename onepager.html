@@ -141,6 +141,35 @@
   footer .cta{background:var(--accent);color:var(--ink);border-radius:999px;padding:11px 24px;font-family:var(--head);font-weight:900;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;}
   footer .src{font-size:12px;color:#9C9C96;margin-top:16px;line-height:1.8;} footer .src a{color:var(--accent);text-decoration:none;}
   .secsub{font-family:var(--head);font-weight:900;font-size:15px;color:var(--ink);margin:18px 0 10px;}
+
+  /* ===== 出力比較チャットUI ===== */
+  .uicompare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:4px 0 6px;}
+  .chatwin{border-radius:14px;overflow:hidden;box-shadow:0 6px 20px rgba(16,24,40,.14);border:1px solid rgba(0,0,0,.06);display:flex;flex-direction:column;}
+  .chatwin .bar{display:flex;align-items:center;gap:8px;padding:9px 12px;font-family:var(--head);font-weight:900;font-size:13px;}
+  .chatwin .dots3{display:flex;gap:5px;margin-right:4px;}
+  .chatwin .dots3 i{width:9px;height:9px;border-radius:50%;display:block;}
+  .chatwin .dots3 i.r{background:#ff5f57;} .chatwin .dots3 i.y{background:#febc2e;} .chatwin .dots3 i.g{background:#28c840;}
+  .chatwin .body{padding:12px 13px 14px;flex:1;display:flex;flex-direction:column;gap:9px;}
+  .chatwin .umsg{align-self:flex-end;max-width:92%;border-radius:12px 12px 3px 12px;padding:7px 11px;font-size:12px;font-weight:700;line-height:1.5;}
+  .chatwin .arow{display:flex;align-items:center;gap:7px;}
+  .chatwin .av{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;line-height:1;}
+  .chatwin .aname{font-family:var(--head);font-weight:900;font-size:12px;}
+  .chatwin .tag{font-size:10px;font-weight:900;border-radius:999px;padding:2px 8px;}
+  .chatwin .amsg{font-size:12px;line-height:1.6;}
+  .chatwin.claude{background:#F4EFE7;}
+  .chatwin.claude .bar{background:#EAE2D5;color:#3A2E22;}
+  .chatwin.claude .umsg{background:#E3D6C3;color:#3A2E22;}
+  .chatwin.claude .av{background:#D97757;color:#fff;}
+  .chatwin.claude .aname{color:#B4522F;}
+  .chatwin.claude .amsg{color:#2A2620;} .chatwin.claude .amsg b{color:#B4522F;}
+  .chatwin.claude .tag{background:#D97757;color:#fff;}
+  .chatwin.gpt{background:#FFFFFF;}
+  .chatwin.gpt .bar{background:#F2F3F5;color:#111827;}
+  .chatwin.gpt .umsg{background:#E7E7E9;color:#111827;}
+  .chatwin.gpt .av{background:#0D0D0D;color:#fff;}
+  .chatwin.gpt .aname{color:#0F7B6C;}
+  .chatwin.gpt .amsg{color:#1F2328;} .chatwin.gpt .amsg b{color:#0F7B6C;}
+  .chatwin.gpt .tag{background:#10A37F;color:#fff;}
 </style>
 </head>
 <body>
@@ -172,7 +201,6 @@
     <a href="#s5">⑤ 出力を並べる</a><a href="#s6">⑥ 結論</a><a href="#s7">⑦ 使い方</a><a href="#s8">⑧ FAQ・注意</a>
   </div>
 
-  <!-- TL;DR -->
   <section>
     <div class="sec-h"><div class="no">!</div><h2>まず3行で</h2></div>
     <div class="tldr">
@@ -189,7 +217,6 @@
     </div>
   </section>
 
-  <!-- 1 基本 -->
   <section id="s1">
     <div class="sec-h"><div class="no">1</div><h2>2大モデルの基本 — 性格が違う</h2></div>
     <p class="body">Fable 5 と GPT-5.6 は、優劣というより <span class="hl">性格が逆</span>です。Fable 5 は「精度をとことん高く、一発で正解に」の“賢い頭脳”。GPT-5.6 は「同じ賢さを、もっと安く速く大量に」の“効率エンジン”。だから勝敗は観点ごとに分かれます。</p>
@@ -206,7 +233,6 @@
     </div>
   </section>
 
-  <!-- 2 ベンチ -->
   <section id="s2">
     <div class="sec-h"><div class="no">2</div><h2>ベンチマークで殴り合う</h2></div>
     <p class="body">同じベンチでも測っているものが違うので、勝者が入れ替わります。数字は公式・第三者評価で報告された Sol と Fable 5 の値です。</p>
@@ -237,7 +263,6 @@
       </ul></div>
   </section>
 
-  <!-- 3 コスパ・速度 -->
   <section id="s3">
     <div class="sec-h"><div class="no">3</div><h2>コスパ・スピードで殴り合う</h2></div>
     <div class="secsub">料金（API・1Mトークン）</div>
@@ -264,7 +289,6 @@
     <p class="note" style="margin-top:10px;">「全部やらせる」と高いが、難所だけに絞れば単体の9割前後を半分〜6割ほどのコストで。→ 使い分けの伏線</p>
   </section>
 
-  <!-- 4 設計思想・effort -->
   <section id="s4">
     <div class="sec-h"><div class="no">4</div><h2>設計思想と effort の違い</h2></div>
     <p class="body">数字の裏にある“考え方”の違いが、いちばん面白いところです。<span class="hl">Fable 5＝「未知を見つける相談相手」</span>（成果の質は“自分が何を知らないか”を明確にできるかで決まる、という思想）。<span class="hl-a">GPT-5.6＝「野心に合わせて広がる効率エンジン」</span>（賢さを保ったまま規模とコストを詰める思想）。</p>
@@ -285,22 +309,27 @@
     <p class="note" style="margin-top:10px;">上げれば「深く・遅く・高コスト」、下げれば「速く・安く・浅い」。難問は高 effort、確認は低 effort でどちらも化ける。</p>
   </section>
 
-  <!-- 5 出力を並べる -->
   <section id="s5">
-    <div class="sec-h"><div class="no">5</div><h2>実際の出力を並べてみる（再現イメージ）</h2></div>
-    <p class="body">同じお題「初心者向けに、料理教室のLPの構成案を作って」を両方に投げると、“らしさ”がくっきり出ます。下は応答傾向をもとにした再現イメージです（実際の出力は毎回変わります）。</p>
-    <div class="secsub">Fable 5 の出力イメージ（深く・確認を挟む・盲点を突く）</div>
-    <div class="prompt">構成案を出す前に、仕上がりを左右する点を3つ確認させてください。<br>① 集客のゴールは「体験予約」か「メール登録」か。導線が変わります。<br>② ターゲットは初心者主婦層か、若い単身者か。写真と言葉選びが変わります。<br>③ 既に強み（少人数制・駅近・食材へのこだわり等）はありますか。<br><span class="cm"># 前提を仮置きした上で7ブロック構成を推奨</span><br><span class="c">※ よくある失敗</span>：教室の「特徴」から書き始めること。読者は「自分がどう変われるか」を先に知りたい。</div>
-    <div class="secsub">GPT-5.6 Sol の出力イメージ（速い・簡潔・すぐ使える手順）</div>
-    <div class="prompt">料理教室LPの構成案です。上から順に置けば形になります。<br>1. ヒーロー：キャッチ＋体験予約ボタン＋写真　2. 悩み共感3つ<br>3. 選ばれる理由（少人数／初心者歓迎／駅近）　4. コース紹介（表）<br>5. 生徒の声3件　6. 講師紹介　7. FAQ → 最後にもう一度予約ボタン<br><span class="c">このまま画像も10枚生成しますか？</span></div>
-    <div class="ba" style="margin-top:16px;">
-      <div class="panel after"><span class="tag">Fable 5</span><ul><li>作る前に“あなたの未知”を潰す</li><li>確認質問＋失敗の指摘</li><li>精度は高いがひと手間</li></ul></div>
+    <div class="sec-h"><div class="no">5</div><h2>実際の出力を並べてみる（5分野・再現UI）</h2></div>
+    <p class="body">同じ依頼を Claude（Fable 5）と ChatGPT（GPT-5.6）の両方に投げると、“らしさ”がくっきり出ます。分野を変えた5例を並べます（応答傾向をもとにした再現UIイメージ。実際の出力は毎回変わります）。</p>
+    <div class="secsub">① 文章：料理教室のLP構成案</div>
+    <div class="uicompare"><div class="chatwin claude"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>Claude</div><div class="body"><div class="umsg">初心者向けに、料理教室のLPの構成案を作って</div><div class="arow"><span class="av">✳</span><span class="aname">Claude</span><span class="tag">Fable 5</span></div><div class="amsg">作る前に3つ確認を。①ゴールは体験予約？メール登録？ ②客層は？ ③既にある強みは？<br>仮置きで7ブロック構成を提案します。<br><b>※よくある失敗</b>：教室の“特徴”から書き始めること。読者は“自分がどう変われるか”を先に知りたい。</div></div></div><div class="chatwin gpt"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>ChatGPT</div><div class="body"><div class="umsg">初心者向けに、料理教室のLPの構成案を作って</div><div class="arow"><span class="av">✦</span><span class="aname">ChatGPT</span><span class="tag">GPT-5.6 Sol</span></div><div class="amsg">LP構成案です。上から置けば形に。<br>①ヒーロー＋予約ボタン ②悩み共感3つ ③選ばれる理由 ④コース(表) ⑤生徒の声 ⑥講師紹介 ⑦FAQ→再予約<br><b>このまま画像も10枚作りますか？</b></div></div></div></div>
+    <div class="secsub">② 調べ物：新NISAをやさしく</div>
+    <div class="uicompare"><div class="chatwin claude"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>Claude</div><div class="body"><div class="umsg">新NISAって何？投資が初めての人向けにやさしく教えて</div><div class="arow"><span class="av">✳</span><span class="aname">Claude</span><span class="tag">Fable 5</span></div><div class="amsg">まず確認を。目的は“制度を理解”ですか、“始め方を知る”ですか。<br>やさしく噛み砕きますが、<b>「必ず得する」という話には注意</b>——元本割れの可能性は残ります。<br>家計の状況を教えてもらえれば、無理のない範囲も一緒に考えます。</div></div></div><div class="chatwin gpt"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>ChatGPT</div><div class="body"><div class="umsg">新NISAって何？投資が初めての人向けにやさしく教えて</div><div class="arow"><span class="av">✦</span><span class="aname">ChatGPT</span><span class="tag">GPT-5.6 Sol</span></div><div class="amsg">新NISAをやさしくまとめます。<br>①税金がかからない投資 ②年間の枠と“つみたて/成長” ③少額から自動積立OK ④売っても枠が翌年復活<br>始め方は「口座を開く→積立設定」の2ステップ。<b>注意点も出しますか？</b></div></div></div></div>
+    <div class="secsub">③ アイデア出し：カフェのキャッチコピー</div>
+    <div class="uicompare"><div class="chatwin claude"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>Claude</div><div class="body"><div class="umsg">新しくオープンするカフェのキャッチコピーを考えて</div><div class="arow"><span class="av">✳</span><span class="aname">Claude</span><span class="tag">Fable 5</span></div><div class="amsg">良いコピーは“誰に何を約束するか”で決まります。<br>客層は？（仕事の合間／子連れ／一人時間）雰囲気は？<br>仮に“一人時間”向けなら3案を先に。方向性を選べば、そのトーンで10案に広げます。</div></div></div><div class="chatwin gpt"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>ChatGPT</div><div class="body"><div class="umsg">新しくオープンするカフェのキャッチコピーを考えて</div><div class="arow"><span class="av">✦</span><span class="aname">ChatGPT</span><span class="tag">GPT-5.6 Sol</span></div><div class="amsg">キャッチコピー10案です。<br>①ひと息の、いちばんいい場所。②今日のごほうび、ここに。③静かに満ちる時間。…（計10案）<br>刺さるものを教えてくれれば、<b>そのトーンで20案に増やします。</b></div></div></div></div>
+    <div class="secsub">④ 学び直し：複利をやさしく説明</div>
+    <div class="uicompare"><div class="chatwin claude"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>Claude</div><div class="body"><div class="umsg">「複利」を中学生にも分かるように説明して</div><div class="arow"><span class="av">✳</span><span class="aname">Claude</span><span class="tag">Fable 5</span></div><div class="amsg">説明の前に1つ。<b>“計算式まで”か“イメージだけ”か</b>で変えますね。<br>イメージ重視なら「雪だるま」の比喩で。<br>最後に理解できたか、1問だけクイズを出させてください。</div></div></div><div class="chatwin gpt"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>ChatGPT</div><div class="body"><div class="umsg">「複利」を中学生にも分かるように説明して</div><div class="arow"><span class="av">✦</span><span class="aname">ChatGPT</span><span class="tag">GPT-5.6 Sol</span></div><div class="amsg">複利＝“増えた分にもさらに利息がつく”しくみ。<br>例：100円→110円→次の年は121円…と雪だるま式。<br>単利との違いは「利息が利息を生むか」。<b>図にもできますが要りますか？</b></div></div></div></div>
+    <div class="secsub">⑤ 段取り：引っ越しやることリスト</div>
+    <div class="uicompare"><div class="chatwin claude"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>Claude</div><div class="body"><div class="umsg">引っ越しの段取りを、やることリストにして</div><div class="arow"><span class="av">✳</span><span class="aname">Claude</span><span class="tag">Fable 5</span></div><div class="amsg">抜けを防ぐため2つ確認を。①何週間後？ ②単身か家族か（手続き量が変わる）。<br>仮に1ヶ月後・単身なら4週前→当日の順で。<br><b>忘れがちな“住所変更○件”は別枠で出します。</b></div></div></div><div class="chatwin gpt"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>ChatGPT</div><div class="body"><div class="umsg">引っ越しの段取りを、やることリストにして</div><div class="arow"><span class="av">✦</span><span class="aname">ChatGPT</span><span class="tag">GPT-5.6 Sol</span></div><div class="amsg">引っ越しやることリストです。<br>【3週前】業者予約／不用品処分【2週前】転出届／ライフライン【1週前】荷造り【当日】掃除／メーター確認【後】転入届／住所変更<br><b>印刷用に表でも出せます。</b></div></div></div></div>
+    <div class="secsub">5分野で見えた“らしさ”の違い</div>
+    <div class="ba">
+      <div class="panel after"><span class="tag">Claude / Fable 5</span><ul><li>作る前に“あなたの未知”を確認しにくる</li><li>「よくある失敗」「注意点」を自分から添える</li><li>精度は高いが、ひと手間かかる</li></ul></div>
       <div class="mid">vs</div>
-      <div class="panel after"><span class="tag" style="background:var(--accent-deep);">GPT-5.6</span><ul><li>完成品を速くそのまま渡す</li><li>次の一手まで提案</li><li>勢いよく前へ</li></ul></div>
+      <div class="panel after"><span class="tag" style="background:var(--accent-deep);">ChatGPT / GPT-5.6</span><ul><li>完成品を速く、そのまま渡す</li><li>次の一手（画像・表・増量）まで提案</li><li>勢いよく前へ進める</li></ul></div>
     </div>
   </section>
 
-  <!-- 6 結論 -->
   <section id="s6">
     <div class="sec-h"><div class="no">6</div><h2>結論 — どっちが優秀か、決める</h2></div>
     <table class="cmp">
@@ -323,7 +352,6 @@
     <p class="note" style="margin-top:10px;">Fable 5 に計画とレビュー、実行は GPT-5.6／Codex。精度と財布の両方を守る二段構え。</p>
   </section>
 
-  <!-- 7 使い方 -->
   <section id="s7">
     <div class="sec-h"><div class="no">7</div><h2>使い方（初心者基準）— 両方に投げて見比べる</h2></div>
     <p class="body">むずかしい設定はいりません。<span class="hl">同じ頼みごとを両方に投げて、出力の「深さ・速さ・語り口・過不足」を見比べる</span>。これを何回かやると、自分だけの選び方の基準ができます。</p>
@@ -344,7 +372,6 @@
     <p class="note" style="margin-top:10px;">🎁 100本の比較用プロンプトほか、そのまま使えるプレゼントはページ下部から受け取れます（全文はプレゼントキットに収録）。</p>
   </section>
 
-  <!-- 8 FAQ・注意 -->
   <section id="s8">
     <div class="sec-h"><div class="no">8</div><h2>FAQ・注意点</h2></div>
     <div class="faq">

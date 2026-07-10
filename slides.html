@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>Fable 5 vs GPT-5.6 徹底比較（32枚）</title>
+<title>Fable 5 vs GPT-5.6 徹底比較（35枚）</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   /* ===== セマンティックトークン（テーマはこの :root 値だけ差し替え）===== */
@@ -159,6 +159,39 @@
   .nav-btn:hover{border-color:var(--brand);background:var(--brand-soft);}
   .counter{color:var(--ink-mid);font-size:14px;min-width:70px;text-align:center;}
   .draft-tag{position:fixed;top:10px;left:10px;background:var(--brand-deep);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;z-index:99;letter-spacing:.4px;}
+
+  /* ===== 出力比較チャットUI ===== */
+  .uicompare{display:grid;grid-template-columns:1fr 1fr;gap:22px;width:100%;max-width:1140px;}
+  .chatwin{border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(16,24,40,.16);border:1px solid rgba(0,0,0,.06);display:flex;flex-direction:column;text-align:left;}
+  .chatwin .bar{display:flex;align-items:center;gap:9px;padding:11px 15px;font-family:var(--head);font-weight:900;font-size:15px;}
+  .chatwin .dots3{display:flex;gap:6px;margin-right:5px;}
+  .chatwin .dots3 i{width:11px;height:11px;border-radius:50%;display:block;}
+  .chatwin .dots3 i.r{background:#ff5f57;} .chatwin .dots3 i.y{background:#febc2e;} .chatwin .dots3 i.g{background:#28c840;}
+  .chatwin .body{padding:15px 16px 17px;flex:1;display:flex;flex-direction:column;gap:11px;}
+  .chatwin .umsg{align-self:flex-end;max-width:90%;border-radius:14px 14px 4px 14px;padding:9px 13px;font-size:13.5px;font-weight:700;line-height:1.5;}
+  .chatwin .arow{display:flex;align-items:center;gap:8px;}
+  .chatwin .av{width:25px;height:25px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;line-height:1;}
+  .chatwin .aname{font-family:var(--head);font-weight:900;font-size:13px;}
+  .chatwin .tag{font-size:11px;font-weight:900;border-radius:999px;padding:2px 10px;}
+  .chatwin .amsg{font-size:13.5px;line-height:1.62;}
+  .chatwin.claude{background:#F4EFE7;}
+  .chatwin.claude .bar{background:#EAE2D5;color:#3A2E22;}
+  .chatwin.claude .umsg{background:#E3D6C3;color:#3A2E22;}
+  .chatwin.claude .av{background:#D97757;color:#fff;}
+  .chatwin.claude .aname{color:#B4522F;}
+  .chatwin.claude .amsg{color:#2A2620;}
+  .chatwin.claude .amsg b{color:#B4522F;}
+  .chatwin.claude .tag{background:#D97757;color:#fff;}
+  .chatwin.gpt{background:#FFFFFF;}
+  .chatwin.gpt .bar{background:#F2F3F5;color:#111827;}
+  .chatwin.gpt .umsg{background:#E7E7E9;color:#111827;}
+  .chatwin.gpt .av{background:#0D0D0D;color:#fff;}
+  .chatwin.gpt .aname{color:#0F7B6C;}
+  .chatwin.gpt .amsg{color:#1F2328;}
+  .chatwin.gpt .amsg b{color:#0F7B6C;}
+  .chatwin.gpt .tag{background:#10A37F;color:#fff;}
+  .uihint{font-size:13px;color:var(--ink-mid);margin-top:14px;text-align:center;max-width:1000px;}
+  .uihint b{color:var(--brand-deep);}
 </style>
 </head>
 <body>
@@ -194,7 +227,7 @@
     <li>専門知識ゼロでも分かるように、日常語と図解で「どっちが優秀か」を比べます</li>
     <li>数字は公式・第三者評価（Artificial Analysis／Cursor 等）で確認できた2026年7月時点の値です</li>
     <li>ベンチは版や条件で動くため“傾向”として見て、最後は自分の仕事で試すのがおすすめ</li>
-    <li>第7章「出力を並べる」は、実際の応答傾向をもとにした再現イメージです</li>
+    <li>第7章「出力を並べる」は、実際の応答傾向をもとにした再現UIイメージです</li>
   </ul>
   <span class="kick">この資料について</span><span class="sno">2</span>
 </div>
@@ -210,7 +243,7 @@
     <li><span>4</span>スピードで殴り合う</li>
     <li><span>5</span>設計思想の違い</li>
     <li><span>6</span>effort（本気度）の話</li>
-    <li><span>7</span>実際の出力を並べる</li>
+    <li><span>7</span>出力を並べる（5分野）</li>
     <li><span>8</span>結論・使い方・使い分け</li>
   </ul>
   <span class="kick">目次</span><span class="sno">3</span>
@@ -221,7 +254,7 @@
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
   <p class="eyebrow">まず3行で</p><h2 class="stitle">結論</h2>
   <div class="tldr">
-    <div class="t"><div class="k">POINT 1</div><p>生スコア・一発の精度・難所は <span class="hl">Fable 5</span> が王者（CursorBench 70.5%・首位）</p></div>
+    <div class="t"><div class="k">POINT 1</div><p>生スコア・一発精度・難所は <span class="hl">Fable 5</span> が王者（CursorBench 70.5%・首位）</p></div>
     <div class="t"><div class="k">POINT 2</div><p>コスパ・速度・エージェント量産は <span class="hl-a">GPT-5.6 Sol</span>（同じ賢さを約1/3の実費で）</p></div>
     <div class="t"><div class="k">POINT 3</div><p>優劣は観点で分かれる。多くの人はGPT-5.6、難所はFable5、最強は“使い分け”</p></div>
   </div>
@@ -355,7 +388,7 @@
   <div class="note-box"><h3>⚠️ ベンチには“ノイズ”が混ざる</h3>
     <ul>
       <li>OpenAI「Separating signal from noise」→ ベンチの“失敗”の多くは、実はテスト側の欠陥だった</li>
-      <li>Cursor「報酬ハッキング」→ 高性能モデルほど、ベンチで“ズル”（ネットやGit履歴から答えを取得）をしがち</li>
+      <li>Cursor「報酬ハッキング」→ 高性能モデルほど“ズル”（ネットやGit履歴から答えを取得）をしがち</li>
       <li>だから「ベンチ1位＝あなたの仕事で1位」ではない</li>
       <li>最後は、同じ仕事を両方に投げて実際に見比べるのがいちばん</li>
     </ul></div>
@@ -482,48 +515,81 @@
   <span class="kick">effort</span><span class="sno">21</span>
 </div>
 
-<!-- 22 出力を並べる setup -->
+<!-- 22 出力intro -->
 <div class="slide">
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
-  <div class="head-row"><span class="secno">07</span><h2>出力を並べてみる（再現イメージ）</h2></div>
-  <p class="lead">同じお題を両方に投げると、“らしさ”がくっきり出ます。次の2枚で見比べます。</p>
-  <span class="pill" style="margin-top:20px;background:var(--brand);border-color:var(--brand-deep);color:#fff;">お題：初心者向けに、料理教室のLPの構成案を作って</span>
-  <p class="ghost" style="margin-top:20px;">※ 次の2枚は実際の応答傾向をもとにした再現イメージ。内容は説明用に整えたもの（実際の出力は毎回変わります）</p>
+  <div class="head-row"><span class="secno">07</span><h2>実際の出力を並べてみる（5分野）</h2></div>
+  <p class="lead">同じ依頼を Claude（Fable 5）と ChatGPT（GPT-5.6）の両方に投げると、“らしさ”がくっきり出ます。次の5枚で、分野を変えて見比べます。</p>
+  <div class="feat" style="max-width:1120px;margin-top:10px;grid-template-columns:repeat(5,1fr);">
+    <div class="f"><div class="ic">①</div><b>文章</b><span>LP構成案</span></div>
+    <div class="f"><div class="ic">②</div><b>調べ物</b><span>新NISA</span></div>
+    <div class="f"><div class="ic">③</div><b>アイデア</b><span>キャッチコピー</span></div>
+    <div class="f"><div class="ic">④</div><b>学び直し</b><span>複利の説明</span></div>
+    <div class="f"><div class="ic">⑤</div><b>段取り</b><span>引っ越しリスト</span></div>
+  </div>
+  <p class="ghost" style="margin-top:16px;">※ 以下は実際の応答傾向をもとにした再現UIイメージ。内容は説明用に整えたもの（実際の出力は毎回変わります）</p>
   <span class="kick">出力を並べる</span><span class="sno">22</span>
 </div>
 
-<!-- 23 Fable5 output -->
+<!-- 23 出力① 文章 -->
 <div class="slide">
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
-  <div class="head-row"><span class="secno">07</span><h2>Fable 5 の出力イメージ</h2></div>
-  <span class="badge" style="margin-bottom:14px;">深く・確認を挟む・盲点を突く</span>
-  <div class="prompt" style="font-size:15px;">構成案を出す前に、仕上がりを左右する点を3つ確認させてください。<br>① 集客のゴールは「体験予約」か「メール登録」か。導線が変わります。<br>② ターゲットは初心者主婦層か、若い単身者か。写真と言葉選びが変わります。<br>③ 既に強み（少人数制・駅近・食材へのこだわり等）はありますか。<br><br><span class="cm"># 前提を仮置きした上で、7ブロック構成を推奨します</span><br>1. ファーストビュー：「定番おかずが作れるようになる」変化を1行＋体験予約ボタン<br>2. 共感：料理の悩み3つ …<br><span class="c">※ よくある失敗</span>：教室の「特徴」から書き始めること。読者は特徴より<br>　「自分がどう変われるか」を先に知りたい。ここを逆にしないこと。</div>
-  <span class="kick">Fable 5 出力</span><span class="sno">23</span>
+  <div class="head-row"><span class="secno">07</span><h2>① 文章：料理教室のLP構成案</h2></div>
+  <div class="uicompare"><div class="chatwin claude"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>Claude</div><div class="body"><div class="umsg">初心者向けに、料理教室のLP（ホームページ）の構成案を作って</div><div class="arow"><span class="av">✳</span><span class="aname">Claude</span><span class="tag">Fable 5</span></div><div class="amsg">作る前に3つ確認させてください。①ゴールは体験予約？メール登録？ ②客層は初心者主婦層？若い単身者？ ③既にある強み（少人数制・駅近等）は？<br>仮置きで7ブロック構成を提案します。<br><b>※ よくある失敗</b>：教室の“特徴”から書き始めること。読者は“自分がどう変われるか”を先に知りたい。</div></div></div><div class="chatwin gpt"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>ChatGPT</div><div class="body"><div class="umsg">初心者向けに、料理教室のLP（ホームページ）の構成案を作って</div><div class="arow"><span class="av">✦</span><span class="aname">ChatGPT</span><span class="tag">GPT-5.6 Sol</span></div><div class="amsg">LP構成案です。上から置けば形になります。<br>①ヒーロー＋体験予約ボタン ②悩み共感3つ ③選ばれる理由 ④コース(表) ⑤生徒の声 ⑥講師紹介 ⑦FAQ→再予約<br><b>このまま画像も10枚作りますか？</b></div></div></div></div>
+  <p class="uihint">左 <b>Claude（Fable 5）</b>＝確認と盲点｜右 <b>ChatGPT（GPT-5.6）</b>＝完成品と次の一手（再現UIイメージ）</p>
+  <span class="kick">出力①文章</span><span class="sno">23</span>
 </div>
 
-<!-- 24 GPT output -->
+<!-- 24 出力② 調べ物 -->
 <div class="slide">
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
-  <div class="head-row"><span class="secno">07</span><h2>GPT-5.6 Sol の出力イメージ</h2></div>
-  <span class="badge" style="margin-bottom:14px;background:var(--accent-deep);">速い・簡潔・すぐ使える手順</span>
-  <div class="prompt" style="font-size:15px;">料理教室LPの構成案です。上から順に置けば形になります。<br><br>1. ヒーロー：キャッチコピー＋体験予約ボタン＋教室写真<br>2. 悩み共感：「レシピ通りでも味が決まらない」等3つ<br>3. 選ばれる理由：少人数／初心者歓迎／駅近 の3枚カード<br>4. コース紹介：月謝・回数・持ち物を表で<br>5. 生徒の声：写真＋一言を3件<br>6. 講師紹介：顔写真＋経歴<br>7. よくある質問 → 最後にもう一度、予約ボタン<br><br><span class="c">このまま画像も10枚生成しますか？</span></div>
-  <span class="kick">GPT-5.6 出力</span><span class="sno">24</span>
+  <div class="head-row"><span class="secno">07</span><h2>② 調べ物：新NISAをやさしく</h2></div>
+  <div class="uicompare"><div class="chatwin claude"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>Claude</div><div class="body"><div class="umsg">新NISAって何？投資が初めての人向けにやさしく教えて</div><div class="arow"><span class="av">✳</span><span class="aname">Claude</span><span class="tag">Fable 5</span></div><div class="amsg">まず確認を。目的は“制度を理解”ですか、“始め方を知る”ですか。両方なら順に説明します。<br>やさしく噛み砕きますが、<b>「必ず得する」という話には注意</b>——元本割れの可能性は残ります。<br>家計の状況を教えてもらえれば、無理のない範囲も一緒に考えます。</div></div></div><div class="chatwin gpt"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>ChatGPT</div><div class="body"><div class="umsg">新NISAって何？投資が初めての人向けにやさしく教えて</div><div class="arow"><span class="av">✦</span><span class="aname">ChatGPT</span><span class="tag">GPT-5.6 Sol</span></div><div class="amsg">新NISAをやさしくまとめます。<br>①税金がかからない投資のしくみ ②年間の枠と“つみたて/成長”の2種 ③少額から自動積立OK ④売っても枠が翌年復活<br>始め方は「口座を開く→積立を設定」の2ステップ。<b>注意点も5行で出しますか？</b></div></div></div></div>
+  <p class="uihint">Fable 5 は<b>目的を確認し注意点も添える</b>／GPT-5.6 は<b>要点を速く整理して次を提案</b></p>
+  <span class="kick">出力②調べ物</span><span class="sno">24</span>
 </div>
 
-<!-- 25 出力読み解き -->
+<!-- 25 出力③ アイデア -->
 <div class="slide">
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
-  <div class="head-row"><span class="secno">07</span><h2>出力の違いを読み解く</h2></div>
+  <div class="head-row"><span class="secno">07</span><h2>③ アイデア出し：カフェのキャッチコピー</h2></div>
+  <div class="uicompare"><div class="chatwin claude"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>Claude</div><div class="body"><div class="umsg">新しくオープンするカフェのキャッチコピーを考えて</div><div class="arow"><span class="av">✳</span><span class="aname">Claude</span><span class="tag">Fable 5</span></div><div class="amsg">良いコピーは“誰に何を約束するか”で決まります。<br>客層は？（仕事の合間／子連れ／一人時間）雰囲気は？<br>仮に“一人時間”向けなら3案を先に出します。方向性を選んでもらえれば、そのトーンで10案に広げます。</div></div></div><div class="chatwin gpt"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>ChatGPT</div><div class="body"><div class="umsg">新しくオープンするカフェのキャッチコピーを考えて</div><div class="arow"><span class="av">✦</span><span class="aname">ChatGPT</span><span class="tag">GPT-5.6 Sol</span></div><div class="amsg">キャッチコピー10案です。<br>①ひと息の、いちばんいい場所。②今日のごほうび、ここに。③静かに満ちる時間。…（計10案）<br>刺さりそうなものを教えてくれれば、<b>そのトーンで20案に増やします。</b></div></div></div></div>
+  <p class="uihint">Fable 5 は<b>“誰に何を”を先に詰める</b>／GPT-5.6 は<b>まず10案ずらりと出す</b></p>
+  <span class="kick">出力③アイデア</span><span class="sno">25</span>
+</div>
+
+<!-- 26 出力④ 学び直し -->
+<div class="slide">
+  <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
+  <div class="head-row"><span class="secno">07</span><h2>④ 学び直し：複利をやさしく説明</h2></div>
+  <div class="uicompare"><div class="chatwin claude"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>Claude</div><div class="body"><div class="umsg">「複利」を中学生にも分かるように説明して</div><div class="arow"><span class="av">✳</span><span class="aname">Claude</span><span class="tag">Fable 5</span></div><div class="amsg">説明の前に1つ。<b>“計算式まで知りたい”か“イメージだけ掴みたい”か</b>で変えますね。<br>イメージ重視なら「雪だるま」の比喩で説明します。<br>最後に理解できたか、1問だけクイズを出させてください。</div></div></div><div class="chatwin gpt"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>ChatGPT</div><div class="body"><div class="umsg">「複利」を中学生にも分かるように説明して</div><div class="arow"><span class="av">✦</span><span class="aname">ChatGPT</span><span class="tag">GPT-5.6 Sol</span></div><div class="amsg">複利＝“増えた分にもさらに利息がつく”しくみ。<br>例：100円→1年で110円→次の年は110円に利息がついて121円…と雪だるま式に増える。<br>単利との違いは「利息が利息を生むか」。<b>図にもできますが要りますか？</b></div></div></div></div>
+  <p class="uihint">Fable 5 は<b>相手に合わせ、最後に理解を確認</b>／GPT-5.6 は<b>要点＋例をすぐ提示</b></p>
+  <span class="kick">出力④学び直し</span><span class="sno">26</span>
+</div>
+
+<!-- 27 出力⑤ 段取り -->
+<div class="slide">
+  <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
+  <div class="head-row"><span class="secno">07</span><h2>⑤ 段取り：引っ越しやることリスト</h2></div>
+  <div class="uicompare"><div class="chatwin claude"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>Claude</div><div class="body"><div class="umsg">引っ越しの段取りを、やることリストにして</div><div class="arow"><span class="av">✳</span><span class="aname">Claude</span><span class="tag">Fable 5</span></div><div class="amsg">抜けを防ぐため2つだけ確認を。①引っ越しは何週間後？ ②単身か家族か（手続き量が変わります）。<br>仮に1ヶ月後・単身なら、4週前→当日の順で並べます。<br><b>特に忘れがちな“住所変更○件”は別枠で出します。</b></div></div></div><div class="chatwin gpt"><div class="bar"><span class="dots3"><i class="r"></i><i class="y"></i><i class="g"></i></span>ChatGPT</div><div class="body"><div class="umsg">引っ越しの段取りを、やることリストにして</div><div class="arow"><span class="av">✦</span><span class="aname">ChatGPT</span><span class="tag">GPT-5.6 Sol</span></div><div class="amsg">引っ越しやることリストです。<br>【3週前】業者予約／不用品処分【2週前】転出届／ライフライン連絡【1週前】荷造り／冷蔵庫を空に【当日】旧居掃除／メーター確認【後】転入届／住所変更<br><b>印刷用に表でも出せます。</b></div></div></div></div>
+  <p class="uihint">Fable 5 は<b>前提を確認し抜けを別枠で防ぐ</b>／GPT-5.6 は<b>時系列で即リスト化</b></p>
+  <span class="kick">出力⑤段取り</span><span class="sno">27</span>
+</div>
+
+<!-- 28 出力読み解き -->
+<div class="slide">
+  <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
+  <div class="head-row"><span class="secno">07</span><h2>5分野で見えた“らしさ”の違い</h2></div>
   <div class="ba">
-    <div class="panel after"><span class="tag">Fable 5</span><ul><li>作る前に“あなたの未知”を潰しにくる</li><li>確認質問＋「よくある失敗」の指摘</li><li>精度は高いが、ひと手間かかる</li></ul></div>
+    <div class="panel after"><span class="tag">Claude / Fable 5</span><ul><li>作る前に“あなたの未知”を確認しにくる</li><li>「よくある失敗」「注意点」を自分から添える</li><li>精度は高いが、ひと手間かかる</li></ul></div>
     <div class="mid">vs</div>
-    <div class="panel after"><span class="tag" style="background:var(--accent-deep);">GPT-5.6</span><ul><li>完成品を速く、そのまま渡す</li><li>次の一手（画像生成）まで提案</li><li>勢いよく前へ進める</li></ul></div>
+    <div class="panel after"><span class="tag" style="background:var(--accent-deep);">ChatGPT / GPT-5.6</span><ul><li>完成品を速く、そのまま渡す</li><li>次の一手（画像・表・増量）まで提案</li><li>勢いよく前へ進める</li></ul></div>
   </div>
-  <p class="lead" style="margin-top:16px;">じっくり企画なら Fable 5、今すぐ叩き台なら GPT-5.6。<span class="hl">両方に投げて見比べる</span>のが相棒選びの近道</p>
-  <span class="kick">出力読み解き</span><span class="sno">25</span>
+  <p class="lead" style="margin-top:16px;">じっくり詰めたい時は Fable 5、今すぐ形が欲しい時は GPT-5.6。<span class="hl">分野が変わっても、この性格は一貫</span></p>
+  <span class="kick">出力読み解き</span><span class="sno">28</span>
 </div>
 
-<!-- 26 結論 勝者表 -->
+<!-- 29 結論 勝者表 -->
 <div class="slide">
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
   <div class="head-row"><span class="secno">08</span><h2>結論：物差しごとの勝者</h2></div>
@@ -538,10 +604,10 @@
       <tr><td>設計思想の役割</td><td>頭脳＝Fable 5 ／ 工場＝GPT-5.6</td></tr>
     </tbody>
   </table>
-  <span class="kick">結論・勝者表</span><span class="sno">26</span>
+  <span class="kick">結論・勝者表</span><span class="sno">29</span>
 </div>
 
-<!-- 27 結論 1つ選ぶなら -->
+<!-- 30 結論 1つ選ぶなら -->
 <div class="slide">
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
   <div class="head-row"><span class="secno">08</span><h2>結論：1つだけ選ぶなら</h2></div>
@@ -551,10 +617,10 @@
     <div class="card center"><div class="pin">◆</div><h3>最強</h3><p><b>使い分け</b>。難所は Fable 5、量とコストは GPT-5.6。2つの性格を知る人が得。</p></div>
   </div>
   <p class="lead" style="margin-top:16px;">Fable 5 に計画とレビュー、実行は GPT-5.6／Codex。精度と財布の両方を守る二段構え</p>
-  <span class="kick">1つ選ぶなら</span><span class="sno">27</span>
+  <span class="kick">1つ選ぶなら</span><span class="sno">30</span>
 </div>
 
-<!-- 28 使い方 悩み→両方 -->
+<!-- 31 使い方 悩み→両方 -->
 <div class="slide">
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
   <div class="head-row"><span class="secno">08</span><h2>使い方：同じ頼みを“両方”に投げる</h2></div>
@@ -564,19 +630,19 @@
     <li><span class="q">「資料づくりが大変」</span><span class="ar">→</span><span class="a">「初心者向け10枚スライドの構成に整えて」</span></li>
   </ul>
   <span class="badge" style="margin-top:16px;">あなたは“監督”。同じ文を両方に貼って、深さ・速さ・語り口を見比べる</span>
-  <span class="kick">使い方</span><span class="sno">28</span>
+  <span class="kick">使い方</span><span class="sno">31</span>
 </div>
 
-<!-- 29 ゴール宣言プロンプト -->
+<!-- 32 ゴール宣言プロンプト -->
 <div class="slide">
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
   <div class="head-row"><span class="secno">08</span><h2>安定させるコツ：ゴールを書く</h2></div>
   <div class="prompt"><span class="cm"># どちらのモデルでも安定する“型”（そのままコピペ）</span><br><span class="c">目標：</span>自分の教室を紹介する1枚のLPの構成案を作る<br><span class="c">成功条件：</span>スマホで崩れない前提／申込ボタンがある／30秒で読める<br><span class="c">制約：</span>落ち着いた雰囲気、専門用語は避ける、写真は3枚想定<br><span class="c">まず不明点があれば質問して。OKしたら構成案を出して。</span></div>
   <p class="lead" style="margin-top:16px;">同じゴール文でも、Fable 5 は質問で盲点を突き、GPT-5.6 は素早く形にする</p>
-  <span class="kick">ゴール宣言</span><span class="sno">29</span>
+  <span class="kick">ゴール宣言</span><span class="sno">32</span>
 </div>
 
-<!-- 30 もう一歩 使い分け運用 -->
+<!-- 33 もう一歩 使い分け運用 -->
 <div class="slide">
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
   <div class="head-row"><span class="secno">08</span><h2>もう一歩：使い分け運用</h2></div>
@@ -590,10 +656,10 @@
     <div class="step"><div class="t">④ もう一周</div><div class="d">差し戻しがあれば更新</div></div>
   </div>
   <p class="lead" style="margin-top:18px;">頭脳と手足を分ける。Fable 5 の高い枠は計画とレビューだけに使えば、消費がゆるやか</p>
-  <span class="kick">使い分け運用</span><span class="sno">30</span>
+  <span class="kick">使い分け運用</span><span class="sno">33</span>
 </div>
 
-<!-- 31 まとめ -->
+<!-- 34 まとめ -->
 <div class="slide">
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
   <p class="eyebrow">まとめ</p><h2 class="stitle">結論は<span class="hl">「使い分けが最強」</span></h2>
@@ -603,17 +669,17 @@
     <li>一発の精度・本物のコード修正・難所は Fable 5</li>
     <li>2つの性格を知って使い分ける人が、結局いちばん得をする</li>
   </ul>
-  <span class="kick">まとめ</span><span class="sno">31</span>
+  <span class="kick">まとめ</span><span class="sno">34</span>
 </div>
 
-<!-- 32 CTA + present + 出典 -->
+<!-- 35 CTA + present + 出典 -->
 <div class="slide"><span class="coin" style="top:auto;left:auto;bottom:-42px;right:-36px;"></span>
   <div class="logo"><svg width="118" height="27" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
   <h2 class="stitle">もっと学ぶ ＆ 🎁 プレゼント</h2>
   <p class="lead" style="max-width:900px;">今回、<span class="hl">比較用プロンプト100選</span>ほか4つのプレゼントを用意しました。概要欄のリンクから、コピペ／ダウンロードで受け取れます。</p>
   <span class="pill" style="margin-top:18px;">チャンネル登録でもっと学ぶ</span>
   <p class="ghost" style="margin-top:18px;">出典：Artificial Analysis ／ Cursor 公式 evals ／ Anthropic・OpenAI 公式ブログ ／ 本資料は非公式まとめ</p>
-  <span class="kick">CTA・出典</span><span class="sno">32</span>
+  <span class="kick">CTA・出典</span><span class="sno">35</span>
 </div>
 
 <div class="nav">
