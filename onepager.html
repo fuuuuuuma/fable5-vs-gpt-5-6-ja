@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fable 5 vs GPT-5.6 徹底比較 — 1枚まとめ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  /* ===== セマンティックトークン（テーマはこの :root 値だけ差し替え）===== */
+  :root{
+    --brand:#1C3461; --brand-deep:#16284A; --brand-soft:rgba(28,52,97,.08); --brand-line:rgba(28,52,97,.22);
+    --accent:#5BBCD4; --accent-deep:#2C7A93; --accent-soft:rgba(91,188,212,.16);
+    --bg:#F7FAFC; --paper:#FFFFFF; --ink:#1C3461; --ink-mid:#4A6080; --ink-sub:#8098B4; --line:rgba(28,52,97,.12);
+    --head:'Noto Sans JP';
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink);font-family:'Noto Sans JP',-apple-system,'Hiragino Sans','Yu Gothic',sans-serif;line-height:1.7;}
+  .doc{max-width:880px;margin:0 auto;background:var(--paper);box-shadow:0 0 60px rgba(0,0,0,.10);overflow:hidden;}
+  .draft-tag{background:var(--brand-deep);color:#fff;font-size:12px;font-weight:700;text-align:center;padding:7px;letter-spacing:.4px;}
+  /* hero */
+  .hero{position:relative;background:linear-gradient(160deg,var(--brand-soft) 0%,var(--bg) 70%);padding:50px 52px 44px;border-bottom:3px solid var(--brand-line);overflow:hidden;}
+  .hero .coin{position:absolute;width:160px;height:160px;border-radius:50%;background:var(--accent);opacity:.15;top:-52px;right:-36px;}
+  .hero .chan{display:inline-flex;align-items:center;gap:12px;margin-bottom:18px;}
+  .hero .chan img{width:50px;height:50px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.16);}
+  .hero .chan b{font-family:var(--head);font-weight:900;color:var(--brand-deep);font-size:17px;}
+  .hero .chan b small{display:block;font-size:11px;color:var(--ink-mid);font-weight:500;letter-spacing:.4px;}
+  .eyebrow{font-family:var(--head);font-weight:900;color:var(--brand-deep);letter-spacing:2px;font-size:13px;display:inline-flex;align-items:center;gap:9px;margin-bottom:12px;}
+  .eyebrow::before{content:'▸';background:var(--accent);color:var(--ink);border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;}
+  h1{font-family:var(--head);font-weight:900;font-size:40px;line-height:1.25;color:var(--ink);}
+  h1 .hl{color:var(--brand-deep);}
+  .hero p.sub{font-size:18px;color:var(--ink-mid);font-weight:700;margin-top:14px;max-width:660px;}
+  .meta{margin-top:20px;display:flex;gap:9px;flex-wrap:wrap;}
+  .meta span{background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:6px 15px;font-size:13px;font-weight:700;color:var(--ink-mid);}
+  .meta span.k{background:var(--accent-soft);border-color:var(--accent);color:var(--ink);}
+  /* toc */
+  .tocbar{background:var(--brand-soft);border-bottom:1px solid var(--line);padding:16px 52px;display:flex;flex-wrap:wrap;gap:8px;}
+  .tocbar a{font-size:13px;font-weight:700;color:var(--brand-deep);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:5px 13px;}
+  .tocbar a:hover{border-color:var(--brand);}
+  /* section */
+  section{padding:40px 52px;border-bottom:1px solid var(--line);}
+  .sec-h{display:flex;align-items:center;gap:13px;margin-bottom:22px;}
+  .sec-h .no{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--ink);font-family:var(--head);font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 0 var(--accent-deep);}
+  .sec-h h2{font-family:var(--head);font-weight:900;font-size:25px;color:var(--ink);}
+  p.body{font-size:16px;color:var(--ink);margin-bottom:12px;}
+  p.note{font-size:13px;color:var(--ink-mid);} .hl{color:var(--brand-deep);font-weight:700;} .hl-a{color:var(--accent-deep);font-weight:700;}
+  .lead{font-size:17px;color:var(--ink-mid);font-weight:700;}
+  /* TL;DR */
+  .tldr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;}
+  .tldr .t{background:var(--bg);border:1.5px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:16px 15px;}
+  .tldr .t .k{font-family:var(--head);font-weight:900;color:var(--ink);font-size:13px;margin-bottom:6px;}
+  .tldr .t p{font-size:14px;font-weight:700;color:var(--ink);line-height:1.5;}
+  /* lists */
+  .bullets{list-style:none;} .bullets li{font-size:16px;font-weight:700;color:var(--ink);padding:10px 0 10px 30px;position:relative;border-bottom:1px solid var(--line);}
+  .bullets li::before{content:'';position:absolute;left:2px;top:50%;transform:translateY(-50%);width:11px;height:11px;border-radius:50%;background:var(--accent);}
+  .checks{list-style:none;} .checks li{font-size:15px;color:var(--ink);padding:7px 0 7px 26px;position:relative;}
+  .checks li::before{content:'✔';position:absolute;left:2px;color:var(--brand);font-weight:900;}
+  /* 2-col */
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center;}
+  .imgbox{border:2px dashed var(--brand-line);border-radius:12px;background:var(--brand-soft);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--brand-deep);font-weight:700;text-align:center;padding:18px;min-height:170px;}
+  .imgbox .ic{font-size:28px;margin-bottom:6px;} .imgbox small{display:block;color:var(--ink-mid);font-weight:500;font-size:11.5px;margin-top:4px;}
+  /* flow */
+  .flow{display:flex;align-items:stretch;gap:0;}
+  .flow .step{flex:1;background:var(--bg);border:1.5px solid var(--line);border-top:4px solid var(--brand);border-radius:10px;padding:13px 9px;text-align:center;}
+  .flow .step .t{font-family:var(--head);font-weight:900;font-size:14px;color:var(--ink);margin-bottom:4px;}
+  .flow .step .d{font-size:11px;color:var(--ink-mid);line-height:1.4;}
+  .flow .arrow{display:flex;align-items:center;color:var(--accent);font-size:20px;font-weight:900;padding:0 4px;}
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;}
+  .stat{background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:18px;text-align:center;}
+  .stat .n{font-family:var(--head);font-size:36px;font-weight:900;color:var(--brand-deep);line-height:1;} .stat .n small{font-size:16px;}
+  .stat .u{font-size:12px;color:var(--ink-mid);margin-top:4px;} .stat .l{font-size:13px;font-weight:700;color:var(--ink);margin-top:6px;}
+  /* cards */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;}
+  .cards .c{background:var(--bg);border:1.5px solid var(--line);border-radius:13px;padding:18px 15px;text-align:center;}
+  .cards .c.accent{border-color:var(--brand);border-width:2px;background:var(--paper);}
+  .cards .c .pin{width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--ink);font-family:var(--head);font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 2px 0 var(--accent-deep);}
+  .cards .c h3{font-family:var(--head);font-weight:900;font-size:16px;color:var(--ink);margin-bottom:6px;} .cards .c p{font-size:13px;color:var(--ink-mid);line-height:1.55;}
+  .cards .c .mark{font-size:11px;font-weight:700;color:var(--brand-deep);margin-top:7px;}
+  /* before/after */
+  .ba{display:flex;align-items:stretch;gap:14px;}
+  .ba .panel{flex:1;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:18px;}
+  .ba .panel.after{border-color:var(--brand);border-width:2px;background:var(--paper);}
+  .ba .panel .tag{font-family:var(--head);font-weight:900;font-size:12px;border-radius:999px;padding:3px 11px;display:inline-block;margin-bottom:9px;}
+  .ba .panel.before .tag{background:var(--line);color:var(--ink-mid);} .ba .panel.after .tag{background:var(--brand);color:#fff;}
+  .ba .panel ul{list-style:none;} .ba .panel li{font-size:14px;color:var(--ink);padding:5px 0 5px 20px;position:relative;}
+  .ba .panel.before li::before{content:'×';position:absolute;left:0;color:var(--ink-sub);font-weight:900;}
+  .ba .panel.after li::before{content:'○';position:absolute;left:0;color:var(--brand);font-weight:900;}
+  .ba .mid{display:flex;align-items:center;color:var(--accent);font-size:26px;font-weight:900;}
+  /* table */
+  table.cmp{width:100%;border-collapse:separate;border-spacing:0;font-size:14px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:14px;}
+  table.cmp th,table.cmp td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);}
+  table.cmp thead th{background:var(--ink);color:#fff;font-family:var(--head);font-weight:700;}
+  table.cmp thead th:first-child{background:var(--brand-deep);}
+  table.cmp tbody tr:last-child td{border-bottom:none;} table.cmp td:first-child{font-weight:700;}
+  table.cmp .yes{color:var(--brand-deep);font-weight:900;} table.cmp .no{color:var(--ink-mid);}
+  /* price */
+  .price{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;}
+  .price .p{background:var(--bg);border:1.5px solid var(--line);border-radius:13px;padding:18px 15px;text-align:center;}
+  .price .p.best{border:2px solid var(--accent);position:relative;background:var(--paper);}
+  .price .p.best::before{content:'人気';position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--ink);font-family:var(--head);font-weight:900;font-size:11px;border-radius:999px;padding:2px 12px;}
+  .price .p .name{font-family:var(--head);font-weight:900;font-size:15px;color:var(--ink);}
+  .price .p .amt{font-family:var(--head);font-size:28px;font-weight:900;color:var(--brand-deep);margin:6px 0;} .price .p .amt small{font-size:12px;color:var(--ink-mid);}
+  .price .p ul{list-style:none;text-align:left;margin-top:8px;} .price .p li{font-size:12px;color:var(--ink-mid);padding:4px 0 4px 18px;position:relative;}
+  .price .p li::before{content:'✔';position:absolute;left:0;color:var(--brand);}
+  /* feature grid */
+  .feat{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;}
+  .feat .f{background:var(--bg);border:1.5px solid var(--line);border-radius:11px;padding:13px;text-align:center;}
+  .feat .f .ic{width:34px;height:34px;border-radius:9px;background:var(--brand-soft);color:var(--brand-deep);font-family:var(--head);font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 7px;}
+  .feat .f b{font-size:13px;color:var(--ink);display:block;} .feat .f span{font-size:11px;color:var(--ink-mid);}
+  /* map */
+  .map{list-style:none;} .map li{display:flex;align-items:center;gap:12px;font-size:15px;font-weight:600;color:var(--ink);padding:11px 14px;margin-bottom:9px;background:var(--bg);border:1.5px solid var(--line);border-left:4px solid var(--brand);border-radius:11px;}
+  .map li .q{flex:1;} .map li .ar{color:var(--accent);font-weight:900;} .map li .a{flex:1.3;color:var(--brand-deep);font-weight:700;}
+  /* steps */
+  .steps{list-style:none;} .steps li{font-size:15px;font-weight:600;color:var(--ink);padding:11px 14px 11px 50px;position:relative;margin-bottom:9px;background:var(--bg);border:1.5px solid var(--line);border-left:4px solid var(--brand);border-radius:11px;}
+  .steps li .n{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:27px;height:27px;background:var(--accent);color:var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-weight:900;font-size:13px;box-shadow:0 2px 0 var(--accent-deep);}
+  /* prompt */
+  .prompt{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--ink);color:#ECECEA;border-radius:10px;padding:14px 16px;line-height:1.65;margin-top:10px;}
+  .prompt .c{color:var(--accent);} .prompt .cm{color:var(--ink-sub);}
+  /* cycle */
+  .cycle{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;}
+  .cycle .node{width:120px;height:120px;border-radius:50%;background:var(--brand-soft);border:2px solid var(--brand);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px;}
+  .cycle .node b{font-family:var(--head);font-size:14px;color:var(--brand-deep);} .cycle .node span{font-size:10.5px;color:var(--ink-mid);}
+  .cycle .ar{color:var(--accent);font-size:22px;font-weight:900;}
+  /* faq */
+  .faq .qa{background:var(--bg);border:1.5px solid var(--line);border-radius:11px;padding:13px 16px;margin-bottom:9px;}
+  .faq .qa .q{font-family:var(--head);font-weight:900;font-size:15px;color:var(--brand-deep);} .faq .qa .q::before{content:'Q. ';color:var(--accent-deep);}
+  .faq .qa .a{font-size:14px;color:var(--ink-mid);margin-top:4px;} .faq .qa .a::before{content:'A. ';color:var(--ink);font-weight:700;}
+  /* timeline */
+  .timeline .row{display:flex;gap:14px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line);}
+  .timeline .tbadge{flex-shrink:0;background:var(--brand);color:#fff;font-family:var(--head);font-weight:900;border-radius:7px;padding:5px 12px;font-size:13px;min-width:84px;text-align:center;}
+  .timeline .row b{font-family:var(--head);font-size:15px;color:var(--ink);} .timeline .row p{font-size:13px;color:var(--ink-mid);margin-top:2px;}
+  /* note box */
+  .box{background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:12px;padding:18px 20px;}
+  .box h3{font-family:var(--head);font-weight:900;color:var(--accent-deep);font-size:16px;margin-bottom:8px;}
+  .box ul{margin-left:18px;font-size:14px;color:var(--ink);} .box li{margin-bottom:5px;}
+  /* footer */
+  footer{background:var(--ink);color:#EBEBE7;padding:36px 52px;}
+  footer .frow{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;}
+  footer .lg{display:flex;align-items:center;gap:11px;} footer .lg img{width:44px;height:44px;border-radius:50%;}
+  footer .lg b{font-family:var(--head);font-weight:900;color:#fff;font-size:15px;} footer .lg b small{display:block;font-size:11px;color:#9C9C96;font-weight:500;}
+  footer .cta{background:var(--accent);color:var(--ink);border-radius:999px;padding:11px 24px;font-family:var(--head);font-weight:900;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;}
+  footer .src{font-size:12px;color:#9C9C96;margin-top:16px;line-height:1.8;} footer .src a{color:var(--accent);text-decoration:none;}
+  .secsub{font-family:var(--head);font-weight:900;font-size:15px;color:var(--ink);margin:18px 0 10px;}
+</style>
+</head>
+<body>
+<svg style="display:none">
+  <symbol id="kawaru-logo" viewBox="0 0 406 93">
+    <rect x="6.67572e-06" y="13.4815" width="7.93029" height="74.5447" fill="currentColor"/>
+    <path d="M18.2397 52.7235L24.2772 47.5817L57.8911 88.0582L48.3318 88.0582L18.2397 52.7235Z" fill="#5BBCD4"/>
+    <path d="M34.8933 49.5514L40.9308 44.4096L77.2278 88.0366L67.4075 88.0262L34.8933 49.5514Z" fill="#5BBCD4"/>
+    <rect x="57.1908" y="2.92276" width="7.93029" height="83.5485" transform="rotate(42.3764 57.1908 2.92276)" fill="currentColor"/>
+    <rect x="59.4772" width="7.93029" height="22.2048" fill="currentColor"/>
+    <rect x="44.4096" y="7.9303" width="7.93029" height="22.9978" transform="rotate(-90 44.4096 7.9303)" fill="currentColor"/>
+    <path d="M110.882 61.3999L110.204 47.3281L135.413 20.7649H148.958L126.233 45.2211L119.46 52.4451L110.882 61.3999ZM99.9703 73.4399V20.7649H112.086V73.4399H99.9703ZM136.015 73.4399L117.278 50.4886L125.254 41.8349L150.237 73.4399H136.015ZM181.053 73.4399V65.5386L180.301 63.8079V49.6609C180.301 47.1525 179.523 45.196 177.968 43.7914C176.463 42.3867 174.13 41.6844 170.97 41.6844C168.813 41.6844 166.681 42.0355 164.574 42.7379C162.517 43.39 160.761 44.293 159.306 45.4469L155.092 37.2446C157.299 35.6895 159.958 34.4855 163.069 33.6326C166.179 32.7798 169.339 32.3534 172.55 32.3534C178.721 32.3534 183.512 33.8082 186.923 36.7179C190.334 39.6275 192.04 44.1676 192.04 50.3381V73.4399H181.053ZM168.712 74.0419C165.552 74.0419 162.843 73.5151 160.585 72.4616C158.328 71.358 156.597 69.878 155.393 68.0219C154.189 66.1657 153.587 64.0838 153.587 61.7761C153.587 59.3681 154.164 57.2611 155.318 55.4551C156.522 53.6491 158.403 52.2445 160.962 51.2411C163.52 50.1876 166.856 49.6609 170.97 49.6609H181.731V56.5086H172.249C169.49 56.5086 167.584 56.9601 166.53 57.8631C165.527 58.7661 165.025 59.8949 165.025 61.2494C165.025 62.7544 165.602 63.9584 166.756 64.8614C167.96 65.7142 169.59 66.1406 171.647 66.1406C173.604 66.1406 175.359 65.6891 176.915 64.7861C178.47 63.833 179.599 62.4534 180.301 60.6474L182.107 66.0654C181.254 68.674 179.699 70.6556 177.441 72.0101C175.184 73.3646 172.274 74.0419 168.712 74.0419ZM213.443 73.4399L198.844 32.9554H209.906L222.021 67.7961H216.754L229.396 32.9554H239.329L251.594 67.7961H246.327L258.818 32.9554H269.203L254.529 73.4399H243.166L232.406 43.5656H235.867L224.73 73.4399H213.443ZM300.427 73.4399V65.5386L299.675 63.8079V49.6609C299.675 47.1525 298.897 45.196 297.342 43.7914C295.837 42.3867 293.504 41.6844 290.344 41.6844C288.187 41.6844 286.055 42.0355 283.948 42.7379C281.891 43.39 280.135 44.293 278.68 45.4469L274.466 37.2446C276.674 35.6895 279.332 34.4855 282.443 33.6326C285.553 32.7798 288.714 32.3534 291.924 32.3534C298.095 32.3534 302.886 33.8082 306.297 36.7179C309.708 39.6275 311.414 44.1676 311.414 50.3381V73.4399H300.427ZM288.086 74.0419C284.926 74.0419 282.217 73.5151 279.959 72.4616C277.702 71.358 275.971 69.878 274.767 68.0219C273.563 66.1657 272.961 64.0838 272.961 61.7761C272.961 59.3681 273.538 57.2611 274.692 55.4551C275.896 53.6491 277.777 52.2445 280.336 51.2411C282.894 50.1876 286.23 49.6609 290.344 49.6609H301.105V56.5086H291.623C288.864 56.5086 286.958 56.9601 285.904 57.8631C284.901 58.7661 284.399 59.8949 284.399 61.2494C284.399 62.7544 284.976 63.9584 286.13 64.8614C287.334 65.7142 288.964 66.1406 291.021 66.1406C292.978 66.1406 294.734 65.6891 296.289 64.7861C297.844 63.833 298.973 62.4534 299.675 60.6474L301.481 66.0654C300.628 68.674 299.073 70.6556 296.815 72.0101C294.558 73.3646 291.648 74.0419 288.086 74.0419ZM324.296 73.4399V32.9554H335.508V44.3934L333.928 41.0824C335.132 38.2229 337.063 36.0657 339.722 34.6109C342.381 33.1059 345.617 32.3534 349.429 32.3534V43.1894C348.928 43.1392 348.476 43.1141 348.075 43.1141C347.674 43.064 347.247 43.0389 346.796 43.0389C343.585 43.0389 340.976 43.967 338.97 45.8231C337.013 47.6291 336.035 50.4635 336.035 54.3264V73.4399H324.296ZM376.043 74.0419C372.681 74.0419 369.671 73.3897 367.013 72.0854C364.404 70.781 362.372 68.7995 360.917 66.1406C359.462 63.4316 358.735 59.9952 358.735 55.8314V32.9554H370.474V54.1006C370.474 57.4618 371.176 59.945 372.581 61.5504C374.036 63.1055 376.068 63.8831 378.676 63.8831C380.482 63.8831 382.088 63.5069 383.492 62.7544C384.897 61.9517 386.001 60.7477 386.803 59.1424C387.606 57.4869 388.007 55.43 388.007 52.9719V32.9554H399.746V73.4399H388.609V62.3029L390.641 65.5386C389.287 68.348 387.28 70.48 384.621 71.9349C382.012 73.3395 379.153 74.0419 376.043 74.0419Z" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<div class="doc">
+
+  <div class="hero">
+    <span class="coin"></span>
+    <div class="chan"><svg width="132" height="30" style="color:var(--brand)"><use href="#kawaru-logo"/></svg></div>
+    <div class="eyebrow">2大モデル徹底比較</div>
+    <h1><span class="hl">Fable 5</span> vs GPT-5.6<br>どっちが本当に優秀か？</h1>
+    <p class="sub">ベンチマーク・コスパ・スピード・設計思想・effort——5つの物差しで、逃げずに勝敗を決める。1ページで全体像・比較表・使い方・使い分けまで詰め込みました。</p>
+    <div class="meta"><span class="k">2026年7月版</span><span>初心者向け</span><span>所要12分</span><span>比較表・図解つき</span><span>出典つき</span></div>
+  </div>
+
+  <div class="tocbar">
+    <a href="#s1">① 2大モデルの基本</a><a href="#s2">② ベンチ</a><a href="#s3">③ コスパ・速度</a><a href="#s4">④ 設計思想・effort</a>
+    <a href="#s5">⑤ 出力を並べる</a><a href="#s6">⑥ 結論</a><a href="#s7">⑦ 使い方</a><a href="#s8">⑧ FAQ・注意</a>
+  </div>
+
+  <!-- TL;DR -->
+  <section>
+    <div class="sec-h"><div class="no">!</div><h2>まず3行で</h2></div>
+    <div class="tldr">
+      <div class="t"><div class="k">POINT 1</div><p>生スコア・一発精度・難所は <span class="hl">Fable 5</span> が王者（CursorBench 70.5%・首位）</p></div>
+      <div class="t"><div class="k">POINT 2</div><p>コスパ・速度・エージェント量産は <span class="hl-a">GPT-5.6 Sol</span>（同じ賢さを約1/3の実費で）</p></div>
+      <div class="t"><div class="k">POINT 3</div><p>優劣は観点で分かれる。多くの人はGPT-5.6、難所はFable5、最強は“使い分け”</p></div>
+    </div>
+    <div class="secsub">この資料で殴り合わせる「5つの物差し」</div>
+    <div class="feat">
+      <div class="f"><div class="ic">①</div><b>ベンチ</b><span>賢さの物差し</span></div>
+      <div class="f"><div class="ic">②</div><b>コスパ</b><span>同じ賢さをいくらで</span></div>
+      <div class="f"><div class="ic">③</div><b>スピード</b><span>速さ・軽さ</span></div>
+      <div class="f"><div class="ic">④</div><b>設計思想</b><span>どう使わせたいか</span></div>
+    </div>
+  </section>
+
+  <!-- 1 基本 -->
+  <section id="s1">
+    <div class="sec-h"><div class="no">1</div><h2>2大モデルの基本 — 性格が違う</h2></div>
+    <p class="body">Fable 5 と GPT-5.6 は、優劣というより <span class="hl">性格が逆</span>です。Fable 5 は「精度をとことん高く、一発で正解に」の“賢い頭脳”。GPT-5.6 は「同じ賢さを、もっと安く速く大量に」の“効率エンジン”。だから勝敗は観点ごとに分かれます。</p>
+    <div class="ba">
+      <div class="panel after"><span class="tag">Fable 5</span><ul><li>一流の専門家に難問を1つ相談</li><li>じっくり考え精度を取る</li><li>コスト・時間はかかりがち</li></ul></div>
+      <div class="mid">vs</div>
+      <div class="panel after"><span class="tag" style="background:var(--accent-deep);">GPT-5.6</span><ul><li>優秀なスタッフを安く何人も雇う</li><li>短く考え短く答える</li><li>本物のコード修正は一歩譲る</li></ul></div>
+    </div>
+    <div class="secsub">プロフィール</div>
+    <div class="cards">
+      <div class="c accent"><div class="pin">F</div><h3>Claude Fable 5</h3><p>Anthropic 最上位「Mythos クラス」。生スコアの王者。API は入力$10／出力$50。</p></div>
+      <div class="c"><div class="pin">S</div><h3>GPT-5.6 Sol</h3><p>OpenAI の旗艦。Fable 5 と正面勝負。API は入力$5／出力$30（約半額）。</p></div>
+      <div class="c"><div class="pin">TL</div><h3>Terra / Luna</h3><p>日常は Terra（$2.50/$15）、大量処理は Luna（$1/$6）。3モデルとも約105万トークン。</p></div>
+    </div>
+  </section>
+
+  <!-- 2 ベンチ -->
+  <section id="s2">
+    <div class="sec-h"><div class="no">2</div><h2>ベンチマークで殴り合う</h2></div>
+    <p class="body">同じベンチでも測っているものが違うので、勝者が入れ替わります。数字は公式・第三者評価で報告された Sol と Fable 5 の値です。</p>
+    <table class="cmp">
+      <thead><tr><th>ベンチマーク</th><th>Fable 5</th><th>GPT-5.6 Sol</th><th>優勢</th></tr></thead>
+      <tbody>
+        <tr><td>Intelligence Index v4.1</td><td class="yes">59.9</td><td>58.9</td><td>Fable 5（僅差）</td></tr>
+        <tr><td>Coding Agent Index v1.1</td><td>77.2</td><td class="yes">80</td><td>GPT-5.6</td></tr>
+        <tr><td>Agents' Last Exam</td><td>40.5%</td><td class="yes">52.7%</td><td>GPT-5.6</td></tr>
+        <tr><td>SWE-Bench Pro</td><td class="yes">約80%</td><td>64.6%</td><td>Fable 5</td></tr>
+        <tr><td>CursorBench</td><td class="yes">70.5%</td><td>67.2%</td><td>Fable 5</td></tr>
+        <tr><td>Terminal-Bench 2.1</td><td>最上位級</td><td>88.8%</td><td>ほぼ拮抗</td></tr>
+      </tbody>
+    </table>
+    <p class="note">出典：Artificial Analysis／Cursor 公式 evals ほか。版・条件で数値は変動します。</p>
+    <div class="secsub">読み解き — 得意が“くっきり”分かれる</div>
+    <div class="ba">
+      <div class="panel after"><span class="tag">Fable 5 が勝つ</span><ul><li>本物のコード修正（SWE-Bench Pro 約80%）</li><li>曖昧な現場作業（CursorBench 70.5%）</li></ul></div>
+      <div class="mid">＋</div>
+      <div class="panel after"><span class="tag" style="background:var(--accent-deep);">GPT-5.6 が勝つ</span><ul><li>自律エージェント（Agents' Last Exam 52.7%）</li><li>エージェント的コーディング（Coding Agent 80）</li></ul></div>
+    </div>
+    <div class="secsub">数字を鵜呑みにしない</div>
+    <div class="box"><h3>⚠️ ベンチには“ノイズ”が混ざる</h3>
+      <ul>
+        <li>OpenAI「Separating signal from noise」→ ベンチの“失敗”の多くは、実はテスト側の欠陥だった</li>
+        <li>Cursor「報酬ハッキング」→ 高性能モデルほど“ズル”（ネットやGit履歴から答えを取得）をしがち</li>
+        <li>「ベンチ1位＝あなたの仕事で1位」ではない。最後は同じ仕事を両方に投げて見比べる</li>
+      </ul></div>
+  </section>
+
+  <!-- 3 コスパ・速度 -->
+  <section id="s3">
+    <div class="sec-h"><div class="no">3</div><h2>コスパ・スピードで殴り合う</h2></div>
+    <div class="secsub">料金（API・1Mトークン）</div>
+    <table class="cmp">
+      <thead><tr><th>モデル</th><th>入力</th><th>出力</th><th>ひとこと</th></tr></thead>
+      <tbody>
+        <tr><td>Claude Fable 5</td><td>$10</td><td>$50</td><td>最上位ゆえ高い</td></tr>
+        <tr><td>GPT-5.6 Sol</td><td class="yes">$5</td><td class="yes">$30</td><td>Fable 5 の約半額</td></tr>
+        <tr><td>GPT-5.6 Terra</td><td class="yes">$2.50</td><td class="yes">$15</td><td>日常運用向け</td></tr>
+        <tr><td>GPT-5.6 Luna</td><td class="yes">$1</td><td class="yes">$6</td><td>大量処理向け</td></tr>
+      </tbody>
+    </table>
+    <div class="stats" style="margin-top:8px;">
+      <div class="stat"><div class="n">約1/2</div><div class="u">定価ベース</div><div class="l">Sol の単価 vs Fable 5</div></div>
+      <div class="stat"><div class="n">約1/3</div><div class="u">実費ベース</div><div class="l">1タスクの実費（AA計測）</div></div>
+      <div class="stat"><div class="n">半分<small>以下</small></div><div class="u">出力トークン・時間</div><div class="l">Sol は短く答え、速い</div></div>
+    </div>
+    <p class="body" style="margin-top:14px;">GPT-5.6 は1つの答えを短いトークンで返すので、定価は約半額でも実費はさらに開き、<span class="hl-a">同じ賢さを約3分の1</span>で使えます。速さも「トークンの少なさ」がそのまま効きます。</p>
+    <div class="secsub">Fable 5 も“頭脳だけ”なら化ける</div>
+    <div class="stats" style="grid-template-columns:1fr 1fr;">
+      <div class="stat"><div class="n">92<small>%</small></div><div class="u">の性能を 63% のコストで</div><div class="l">Sonnet 5＋Fable 5 アドバイザー</div></div>
+      <div class="stat"><div class="n">96<small>%</small></div><div class="u">の性能を 46% のコストで</div><div class="l">Fable 5 指揮＋Sonnet 5 ワーカー</div></div>
+    </div>
+    <p class="note" style="margin-top:10px;">「全部やらせる」と高いが、難所だけに絞れば単体の9割前後を半分〜6割ほどのコストで。→ 使い分けの伏線</p>
+  </section>
+
+  <!-- 4 設計思想・effort -->
+  <section id="s4">
+    <div class="sec-h"><div class="no">4</div><h2>設計思想と effort の違い</h2></div>
+    <p class="body">数字の裏にある“考え方”の違いが、いちばん面白いところです。<span class="hl">Fable 5＝「未知を見つける相談相手」</span>（成果の質は“自分が何を知らないか”を明確にできるかで決まる、という思想）。<span class="hl-a">GPT-5.6＝「野心に合わせて広がる効率エンジン」</span>（賢さを保ったまま規模とコストを詰める思想）。</p>
+    <table class="cmp">
+      <thead><tr><th>観点</th><th>Fable 5</th><th>GPT-5.6 Sol</th></tr></thead>
+      <tbody>
+        <tr><td>ひとことで</td><td class="yes">賢い頭脳・相談相手</td><td>効率のいい工場</td></tr>
+        <tr><td>力の入れどころ</td><td>一発の精度・未知の発見</td><td class="yes">コスト効率・規模・速度</td></tr>
+        <tr><td>得意な渡し方</td><td>難問を1つ、じっくり</td><td>大量の作業を、まとめて</td></tr>
+        <tr><td>向く役割</td><td>計画・レビュー・難所判断</td><td>実行・量産・自律エージェント</td></tr>
+      </tbody>
+    </table>
+    <div class="secsub">effort（本気度）— もう1つの隠れたレバー</div>
+    <div class="cards" style="grid-template-columns:1fr 1fr;">
+      <div class="c accent"><div class="pin">G</div><h3>GPT-5.6</h3><p>推論の強さを6段階で刻む<br>none / low / medium / high / xhigh / max</p></div>
+      <div class="c"><div class="pin">F</div><h3>Fable 5（Claude）</h3><p>「モデル選択」×「effort level」の2軸。effort↑で約7倍のトークンで確信度UP。</p></div>
+    </div>
+    <p class="note" style="margin-top:10px;">上げれば「深く・遅く・高コスト」、下げれば「速く・安く・浅い」。難問は高 effort、確認は低 effort でどちらも化ける。</p>
+  </section>
+
+  <!-- 5 出力を並べる -->
+  <section id="s5">
+    <div class="sec-h"><div class="no">5</div><h2>実際の出力を並べてみる（再現イメージ）</h2></div>
+    <p class="body">同じお題「初心者向けに、料理教室のLPの構成案を作って」を両方に投げると、“らしさ”がくっきり出ます。下は応答傾向をもとにした再現イメージです（実際の出力は毎回変わります）。</p>
+    <div class="secsub">Fable 5 の出力イメージ（深く・確認を挟む・盲点を突く）</div>
+    <div class="prompt">構成案を出す前に、仕上がりを左右する点を3つ確認させてください。<br>① 集客のゴールは「体験予約」か「メール登録」か。導線が変わります。<br>② ターゲットは初心者主婦層か、若い単身者か。写真と言葉選びが変わります。<br>③ 既に強み（少人数制・駅近・食材へのこだわり等）はありますか。<br><span class="cm"># 前提を仮置きした上で7ブロック構成を推奨</span><br><span class="c">※ よくある失敗</span>：教室の「特徴」から書き始めること。読者は「自分がどう変われるか」を先に知りたい。</div>
+    <div class="secsub">GPT-5.6 Sol の出力イメージ（速い・簡潔・すぐ使える手順）</div>
+    <div class="prompt">料理教室LPの構成案です。上から順に置けば形になります。<br>1. ヒーロー：キャッチ＋体験予約ボタン＋写真　2. 悩み共感3つ<br>3. 選ばれる理由（少人数／初心者歓迎／駅近）　4. コース紹介（表）<br>5. 生徒の声3件　6. 講師紹介　7. FAQ → 最後にもう一度予約ボタン<br><span class="c">このまま画像も10枚生成しますか？</span></div>
+    <div class="ba" style="margin-top:16px;">
+      <div class="panel after"><span class="tag">Fable 5</span><ul><li>作る前に“あなたの未知”を潰す</li><li>確認質問＋失敗の指摘</li><li>精度は高いがひと手間</li></ul></div>
+      <div class="mid">vs</div>
+      <div class="panel after"><span class="tag" style="background:var(--accent-deep);">GPT-5.6</span><ul><li>完成品を速くそのまま渡す</li><li>次の一手まで提案</li><li>勢いよく前へ</li></ul></div>
+    </div>
+  </section>
+
+  <!-- 6 結論 -->
+  <section id="s6">
+    <div class="sec-h"><div class="no">6</div><h2>結論 — どっちが優秀か、決める</h2></div>
+    <table class="cmp">
+      <thead><tr><th>物差し</th><th>勝者</th></tr></thead>
+      <tbody>
+        <tr><td>総合の賢さ（Intelligence Index）</td><td>ほぼ引き分け（Fable 5 が僅差）</td></tr>
+        <tr><td>一発の精度・本物のコード修正</td><td class="yes">Fable 5</td></tr>
+        <tr><td>自律エージェントの総合力</td><td class="yes">GPT-5.6 Sol</td></tr>
+        <tr><td>コスパ（同じ賢さの実費）</td><td class="yes">GPT-5.6 Sol</td></tr>
+        <tr><td>スピード・軽さ</td><td class="yes">GPT-5.6 Sol</td></tr>
+        <tr><td>設計思想の役割</td><td>頭脳＝Fable 5 ／ 工場＝GPT-5.6</td></tr>
+      </tbody>
+    </table>
+    <div class="secsub">1つだけ選ぶなら</div>
+    <div class="cards">
+      <div class="c accent"><div class="pin">◎</div><h3>多くの人</h3><p>GPT-5.6 Sol（迷ったら Terra）。同じ賢さを約1/3で速く。日常の主力に。</p></div>
+      <div class="c"><div class="pin">★</div><h3>精度が命</h3><p>Fable 5。難所のバグ・複雑な設計判断に。“難所だけ”に絞る。</p></div>
+      <div class="c"><div class="pin">◆</div><h3>最強</h3><p>使い分け。難所は Fable 5、量とコストは GPT-5.6。</p></div>
+    </div>
+    <p class="note" style="margin-top:10px;">Fable 5 に計画とレビュー、実行は GPT-5.6／Codex。精度と財布の両方を守る二段構え。</p>
+  </section>
+
+  <!-- 7 使い方 -->
+  <section id="s7">
+    <div class="sec-h"><div class="no">7</div><h2>使い方（初心者基準）— 両方に投げて見比べる</h2></div>
+    <p class="body">むずかしい設定はいりません。<span class="hl">同じ頼みごとを両方に投げて、出力の「深さ・速さ・語り口・過不足」を見比べる</span>。これを何回かやると、自分だけの選び方の基準ができます。</p>
+    <ul class="map">
+      <li><span class="q">「文章を整えたい」</span><span class="ar">→</span><span class="a">「このメールを丁寧な文に。3案ください」</span></li>
+      <li><span class="q">「調べ物に時間がかかる」</span><span class="ar">→</span><span class="a">「話題のAIツールを調べて表に。出典も」</span></li>
+      <li><span class="q">「資料づくりが大変」</span><span class="ar">→</span><span class="a">「初心者向け10枚スライドの構成に整えて」</span></li>
+    </ul>
+    <div class="secsub">どちらでも安定する“ゴール宣言”の型</div>
+    <div class="prompt"><span class="cm"># そのままコピペ</span><br><span class="c">目標：</span>自分の教室を紹介する1枚のLPの構成案を作る<br><span class="c">成功条件：</span>スマホで崩れない前提／申込ボタンがある／30秒で読める<br><span class="c">制約：</span>落ち着いた雰囲気、専門用語は避ける、写真は3枚想定<br><span class="c">まず不明点があれば質問して。OKしたら構成案を出して。</span></div>
+    <div class="secsub">使い分け運用（頭脳と手足）</div>
+    <div class="flow">
+      <div class="step"><div class="t">① 考えさせる</div><div class="d">Fable 5 に計画</div></div><div class="arrow">→</div>
+      <div class="step"><div class="t">② 動かさせる</div><div class="d">GPT-5.6／Codex に実装</div></div><div class="arrow">→</div>
+      <div class="step"><div class="t">③ 検収させる</div><div class="d">Fable 5 にレビュー</div></div><div class="arrow">↻</div>
+      <div class="step"><div class="t">④ もう一周</div><div class="d">差し戻しで更新</div></div>
+    </div>
+    <p class="note" style="margin-top:10px;">🎁 100本の比較用プロンプトほか、そのまま使えるプレゼントはページ下部から受け取れます（全文はプレゼントキットに収録）。</p>
+  </section>
+
+  <!-- 8 FAQ・注意 -->
+  <section id="s8">
+    <div class="sec-h"><div class="no">8</div><h2>FAQ・注意点</h2></div>
+    <div class="faq">
+      <div class="qa"><div class="q">結局、賢いのはどっち？</div><div class="a">総合はほぼ互角（Fable 5 が僅差で上）。「本物のコード修正」は Fable 5、「自律エージェント」は GPT-5.6 と得意が分かれます。</div></div>
+      <div class="qa"><div class="q">安く済ませたいなら？</div><div class="a">GPT-5.6。同じ賢さを実費で約3分の1。日常は Terra、量は Luna で十分です。</div></div>
+      <div class="qa"><div class="q">Fable 5 は高いだけ？</div><div class="a">いいえ。「難所の判断・計画・レビューだけ」に絞ると、少ない呼び出しで大きなリターンが出ます。</div></div>
+      <div class="qa"><div class="q">片方だけ契約するなら？</div><div class="a">迷う人は GPT-5.6（無料でも Terra が使える）を主力に。精度が命の仕事で Fable 5 を単発で足すのが現実的。</div></div>
+    </div>
+    <div class="secsub">数字を読むときの注意</div>
+    <div class="box"><h3>⚠️ この資料の読み方</h3>
+      <ul><li>数値・価格は2026年7月時点で確認できた範囲。ベンチは版・条件で動くため“傾向”として見る</li>
+      <li>「必ず勝てる」「絶対こっち」等の断定・保証はしない。最後は自分の仕事で試して選ぶ</li>
+      <li>本資料は非公式まとめ。最終確認は各公式で</li></ul></div>
+  </section>
+
+  <footer>
+    <div class="frow">
+      <div class="lg"><svg width="132" height="30" style="color:#fff"><use href="#kawaru-logo"/></svg></div>
+      <a class="cta" href="https://fuuuuuuma.github.io/fable5-vs-gpt-5-6-ja/present.html">🎁 プレゼントを受け取る</a>
+    </div>
+    <p class="src">出典：Artificial Analysis <a href="https://artificialanalysis.ai/">artificialanalysis.ai</a> ／ Cursor 公式 evals <a href="https://cursor.com/ja/evals">cursor.com/ja/evals</a> ／ Anthropic・OpenAI 公式ブログ<br>
+      ※ 本資料は非公式まとめ。全文（GitHub 公開）・スライドは概要欄から。数値・価格は2026年7月時点で確認できた範囲のもので、更新により変わることがあります。</p>
+  </footer>
+</div>
+</body>
+</html>
